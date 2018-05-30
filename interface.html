@@ -1,0 +1,110 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>北京轨道交通线路图</title>
+<link type="text/css" rel="stylesheet" href="css/subwaymap.css" />
+<!--link type="text/css" rel="stylesheet" href="css/tooltip.css" /-->
+<script type="text/javascript" src="js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="js/subway.data.js"></script>
+<script type="text/javascript"src="js/interface.js"></script>
+<script type="text/javascript" src="js/subway.map.js"></script>
+</head> 
+<script type="text/javascript">
+$(document).ready(function() {
+	//scale_routemap(1.1,'line2','allway');//放大、缩小（上行/下行）显示路网图接口
+	var stationinfo=[{"lineid":"line1","linecolor":"#cd0000","linewidth":"10","startnodeid":"17","endnodeid":"12","stationbgcolor":"#ffff00","stationfgcolor":"#000000"},{"lineid":"line2","linecolor":"#cd0000","linewidth":"4","startnodeid":"12","endnodeid":"6","stationbgcolor":"#40e0d0","stationfgcolor":"#40e0d0"},{"lineid":"line1","linecolor":"#cd0000","linewidth":"7","startnodeid":"6","endnodeid":"4","stationbgcolor":"#ffff00","stationfgcolor":"#000000"},{"lineid":"line10","linecolor":"#cd0000","linewidth":"1","startnodeid":"4","endnodeid":"99","stationbgcolor":"#ffff00","stationfgcolor":"#000000"},{"lineid":"line13","linecolor":"#cd0000","linewidth":"15","startnodeid":"115","endnodeid":"99"}];
+	//var stationinfo={routinfo:[{lineid:"line1",startnodeid:"23",endnodeid:"20",wayline:"upway",linecolor:"#cd0000",linewidth:3}]};
+	//var stationinfo={routinfo:[{lineid:"line1",name:"一号线",startnodeid:"4",endnodeid:"7",wayline:"upway",linecolor:"#cd0000",linewidth:3,travalinfo:[{starttime:"19:00"},{endtime:"19:10"}]},{lineid:"line10",name:"十号线",startnodeid:"104",endnodeid:"4",wayline:"upway",linecolor:"#cd0000",linewidth:3,travalinfo:[{starttime:"19:00"},{endtime:"19:10"}]}]};
+	stationinfo = JSON.stringify(stationinfo);
+	click_routemap(0.8,stationinfo);//点选接口
+	move_routemap(300,150);//鼠标移动接口
+});
+function submit(){
+	var lineid=$('select#sel_line option:selected').val();
+	var startnodeid=$('select#sel_startstation option:selected').val();
+	var endnodeid=$('select#sel_endstation option:selected').val();
+	//var stationinfo="";
+	var datas=[];  
+  
+var data = {};  
+data["lineid"] = lineid;  
+data["startnodeid"] = startnodeid;  
+data["endnodeid"] = endnodeid;  
+datas.push(data);  
+var jsonString = JSON.stringify(datas);  //[{"id":1,"name":"test1","age":2}] 
+click_routemap(0.8,jsonString);//点选接口
+move_routemap(300,150);//鼠标移动接口
+	}
+	function getstation(lineid){
+		var html='';
+		if(lineid=="line1")
+		{
+			html='从<select id="sel_startstation"><option value="17">万寿路</option> <option value="16">公主坟</option> <option value="15">军事博物馆</option><option value="14">木樨地</option> <option value="13">南礼士路</option> <option value="12">复兴门</option><option value="11">西单</option> <option value="10">天安门西</option>' 
+		+'<option value="9">天安门东</option> <option value="8">王府井</option> <option value="7">东单</option> <option value="6">建国门</option> <option value="5">永安里</option> <option value="4">国贸</option> <option value="3">大望路</option>  </select>'
+	
+	+'到<select id="sel_endstation"><option value="17">万寿路</option> <option value="16">公主坟</option> <option value="15">军事博物馆</option><option value="14">木樨地</option> <option value="13">南礼士路</option> <option value="12">复兴门</option><option value="11">西单</option> <option value="10">天安门西</option>' 
+		+'<option value="9">天安门东</option> <option value="8">王府井</option> <option value="7">东单</option> <option value="6">建国门</option> <option value="5">永安里</option> <option value="4">国贸</option> <option value="3">大望路</option>  </select>';
+		}
+		if(lineid=="line2")
+		{
+			html='从<select id="sel_startstation"><option value="39">西直门</option><option value="24">积水潭</option><option value="25">鼓楼大街</option><option value="26">安定门</option></select>到<select id="sel_endstation"><option value="39">西直门</option><option value="24">积水潭</option><option value="25">鼓楼大街</option><option value="26">安定门</option></select>';
+	  }
+	  $('#stationinfo').html(html);
+		}
+</script>
+<body style="overflow:scroll;overflow-x:hidden;overflow-y:hidden"> 
+<div id="map"> 
+   <div class="subway-map" data-columns="40" data-rows="43"  data-cellSize="40" data-legendId="legend" data-textClass="text" data-gridNumbers="false" data-grid="false" data-lineWidth="8" data-textSize="14" data-reversemarkers="false">
+  </div>
+</div>
+<div style="position: fixed;top: 10px;right:85px; z-index:1001;">
+	<div style="margin-bottom:5px">
+	线路：<select id="sel_line">
+		<option value="line1" onclick="getstation('line1');">1号线</option>
+		<option value="line2" onclick="getstation('line2');">2号线</option>
+	</select>
+</div>
+	<div id="stationinfo" style="margin-bottom:5px">
+	从<select id="sel_startstation">
+		<option value="17">万寿路</option> 
+		<option value="16">公主坟</option> 
+		<option value="15">军事博物馆</option>
+		<option value="14">木樨地</option> 
+		<option value="13">南礼士路</option> 
+		<option value="12">复兴门</option>
+		<option value="11">西单</option> 
+		<option value="10">天安门西</option> 
+		<option value="9">天安门东</option> 
+		<option value="8">王府井</option> 
+		<option value="7">东单</option> 
+		<option value="6">建国门</option> 
+		<option value="5">永安里</option> 
+		<option value="4">国贸</option> 
+		<option value="3">大望路</option>  
+	</select>
+	
+	到<select id="sel_endstation">
+		<option value="17">万寿路</option> 
+		<option value="16">公主坟</option> 
+		<option value="15">军事博物馆</option>
+		<option value="14">木樨地</option> 
+		<option value="13">南礼士路</option> 
+		<option value="12">复兴门</option>
+		<option value="11">西单</option> 
+		<option value="10">天安门西</option> 
+		<option value="9">天安门东</option> 
+		<option value="8">王府井</option> 
+		<option value="7">东单</option> 
+		<option value="6">建国门</option> 
+		<option value="5">永安里</option> 
+		<option value="4">国贸</option> 
+		<option value="3">大望路</option>   
+	</select>
+</div>
+<div>
+	<input type="button" onclick="submit()" value="提交"/>
+</div>
+</div>
+</body>
+</html>

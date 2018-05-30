@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>北京轨道交通线路图</title>
+<link type="text/css" rel="stylesheet" href="css/subwaymap.css" />
+<!--link type="text/css" rel="stylesheet" href="css/tooltip.css" /-->
+<script type="text/javascript" src="js/jquery-1.4.2.min.js" ></script>
+<script type="text/javascript" src="js/subway.data.js"></script>
+<script type="text/javascript"src="js/subway.misc.js"></script>
+<script type="text/javascript" src="js/subway.map.js"></script>
+<script type="text/javascript"src="js/slider.js"></script>
+<!--script type="text/javascript"src="js/tooltip.js"></script-->
+</head> 
+
+
+<body  style="overflow:scroll;overflow-x:hidden;overflow-y:hidden;background-color:#35383e"> 
+<div id="map"> 
+   <div class="subway-map" data-columns="60" data-rows="60"  data-cellSize="40" data-legendId="legend" data-textClass="text" data-gridNumbers="false" data-grid="false" data-lineWidth="8" data-textSize="12" data-reversemarkers="false">
+  </div>
+</div>
+<div class="mapZoomCtrl" unselectable="on" style="width: 62px; height: 214px; bottom: auto; right: auto; top: 0px; left: 0px; position: fixed; z-index: 3100; -moz-user-select: none;">
+    <div class="mapZoom" style="height: 147px; width: 62px;">
+    <div class="zoomButton mapZoomOut" title="缩小一级" style="margin-top: 42px;margin-left: 17px;"></div>
+    <div class="zoomButton mapZoomIn" title="放大一级" style="top: 83px;left:28px;"></div>
+    <div class="carpe_vertical_slider_track" style="background-color: #fff; border-color: #fff; top: 16px; left: 8px">
+		<div class="carpe_slider_slit"></div>
+    </div>           
+    </div>
+</div>
+
+<div id="mapControl" style="position: fixed;top: 5%;left:80%; background-image:url(images/路线选择控件.png);background-repeat:no-repeat;z-index:4000">
+  <div class="clsHead">
+    <span><img src="images/a2.gif" alt=""/></span>
+  </div>
+ <div id="selectLine" style="position: relative;left:5px;z-index: 3100">  
+    <div id="all" class="lineSelect">
+     <span class="lineColor" style="background-color:#000000;"></span>
+     <span class="lineName">全线</span>
+   </div> 
+  
+ </div>
+</div>
+
+
+
+<div id='stationInfo' class="popDiv">
+     <div  id='stationInfoBody' class="popDivBody"></div>
+     <div class="ui-tooltip-pointer-down">
+        <div class="ui-tooltip-pointer-down-inner"></div>
+     </div>
+</div>
+
+<script type="text/javascript"> 
+        var MarginLeft = 0;   	    //浮动层离浏览器右侧的距离
+		var MarginTop = 100;		//浮动层离浏览器顶部的距离
+		var Width = 270;            //浮动层宽度
+		var Heigth= 55;				//浮动层高度
+		
+		//设置浮动层宽、高
+		function Set()
+		{
+		    document.getElementById("mapControl").style.width = Width + 'px';
+//		    document.getElementById("mapControl").style.height = Heigth + 'px';
+
+            var b_top = window.pageYOffset  
+                || document.documentElement.scrollTop  
+                || document.body.scrollTop  
+                || 0;
+            var b_width= document.body.clientWidth;
+//		    document.getElementById("mapControl").style.top = b_top + MarginTop + 'px';
+		    document.getElementById("mapControl").style.left = b_width - Width - MarginLeft + 'px';
+//		    setTimeout("Move();",100);
+		}
+		 
+		Set();
+ 
+        function initMap(){
+	       $(".subway-map").subwayMap({ debug: true, line:"all", lineStyle:"double"});
+	   
+	       var top = -890; 
+	       var left = -580;
+	       $("#map canvas").css("top", top +"px");
+	       $("#map canvas").css("left", left +"px");
+       }
+  
+        initMap();
+  
+</script>
+
+
+</body>
+</html>
